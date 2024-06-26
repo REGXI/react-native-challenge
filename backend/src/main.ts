@@ -7,8 +7,8 @@ import {ValidationPipe} from "@nestjs/common";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = new DocumentBuilder()
-    .setTitle('Shey Store API')
-    .setDescription('Shey Store API Doc')
+    .setTitle('Challenge API')
+    .setDescription('Challenge API Doc')
     .setVersion('1.0')
     .addBearerAuth(
       {
@@ -20,7 +20,7 @@ async function bootstrap() {
       },
       'access-token',
     )
-    .addTag('Shey Store')
+    .addTag('Challenge')
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
