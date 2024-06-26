@@ -18,7 +18,7 @@ export default function ChatDetail({ chat }: ChatDetailProps) {
                 }}
             ></Image>
             <Text style={{ fontSize: 24, margin: 16 }}>{chat.name}</Text>
-            <Text style={{ margin: 16 }}>{chat.lastMessage}</Text>
+            <Text style={{ margin: 16 }}>{chat.message}</Text>
         </View>
     );
 }

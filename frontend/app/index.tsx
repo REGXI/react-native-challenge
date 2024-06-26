@@ -1,35 +1,43 @@
 import { Text, View, FlatList } from "react-native";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigation } from "expo-router";
 
 import { ChatItem } from "@/types";
 
-import { ChatListItem } from "@/components/home/ChatListItem";
+import { ChatListItem, chatListItemHeight } from "@/components/home/ChatListItem";
 import { Link } from 'expo-router';
+
+import { useChatApi } from "@/service/api";
 
 export default function Index() {
   const navigation = useNavigation();
-  const chats: ChatItem[] = [
-    {
-      id: "1",
-      name: "John Doe",
-      image: "https://picsum.photos/300/?blur",
-      lastMessage: "Hello, how are you?",
-      lastMessageDate: new Date(),
+  const {
+    getChats: {
+      data: chats,
+      query: getChats,
+      isLoading: isGettingChats,
     },
-    {
-      id: "2",
-      name: "Jane Doe",
-      image: "https://picsum.photos/300/?blur",
-      lastMessage: "I'm good, thank you.",
-      lastMessageDate: new Date(),
-    },
-  ];
+  } = useChatApi();
 
   useEffect(() => {
     navigation.setOptions({
       title: "Chats",
     });
+  }, []);
+
+  useEffect(() => {
+    getChats()
+    .catch((error) => {
+      console.error(error);
+    });
+  }, []);
+
+  const renderItem = useCallback(({ item }: { item: ChatItem }) => {
+    return (
+      <Link href={`/chat/${item.id}`} style={{ width: '100%' }} >
+        <ChatListItem chat={item} />
+      </Link>
+    );
   }, []);
 
   return (
@@ -40,22 +48,17 @@ export default function Index() {
         alignItems: "center"
       }}
     >
+      {isGettingChats && <Text>Loading...</Text>}
+
       <FlatList
         data={chats}
-        renderItem={ListItem}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        getItemLayout={(data, index) => ({ length: chatListItemHeight, offset: chatListItemHeight * index, index }) }
         style={{
           width: "100%",
         }}
       ></FlatList>
     </View>
-  );
-}
-
-function ListItem({ item }: { item: ChatItem }) {
-  return (
-    <Link href={`/chat/${item.id}`} style={{ width: '100%' }} >
-      <ChatListItem chat={item} />
-    </Link>
   );
 }

@@ -1,30 +1,33 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 import { ChatItem } from "@/types";
+import { memo } from "react";
 export interface ChatListItemProps {
     chat: ChatItem;
 }
 
-export const ChatListItem = ({ chat }: ChatListItemProps) => {
-    return (
-        <View style={styles.container}>
-            <Image style={styles.image} source={{ uri: chat.image }} />
-            <View style={styles.textContents}>
-                <Text style={styles.title}>{chat.name}</Text>
-                <Text style={styles.message}>{chat.lastMessage}</Text>
-            </View>
-            <Text style={styles.timeStamp}>
-                {formatDistanceToNow(chat.lastMessageDate, { addSuffix: true })}
-            </Text>
-        </View>
-    );
-}
+export const chatListItemHeight = 80;
 
-function formatDistanceToNow(date: Date, options: { addSuffix: boolean }) {
+export const ChatListItem = ({ chat }: ChatListItemProps) => (
+    <View style={styles.container}>
+        <Image style={styles.image} source={{ uri: chat.image }} />
+        <View style={styles.textContents}>
+            <Text style={styles.title}>{chat.name}</Text>
+            <Text style={styles.message}>{chat.message}</Text>
+        </View>
+        <Text style={styles.timeStamp}>
+            {formatDistanceToNow(chat.updated_at, { addSuffix: true })}
+        </Text>
+    </View>
+);
+
+function formatDistanceToNow(date: string, options: { addSuffix: boolean }) {
     // This is a naive implementation of the function
     // that handles the most common cases.
 
+    const dateObj = new Date(date);
+
     const now = new Date();
-    const diff = now.getTime() - date.getTime();
+    const diff = now.getTime() - dateObj.getTime();
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -44,9 +47,10 @@ function formatDistanceToNow(date: Date, options: { addSuffix: boolean }) {
 const styles = StyleSheet.create({
     container: {
         display: "flex",
+        width: "100%",
         flexDirection: "row",
         padding: 16,
-        height: 80,
+        height: chatListItemHeight,
         flexGrow: 1,
         borderBottomWidth: 1,
         borderBottomColor: "lightgray",
