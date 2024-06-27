@@ -22,11 +22,6 @@ async function bootstrap() {
         )
         .addTag('Challenge')
         .build()
-    app.enableCors({
-        origin: ['*'],
-        methods: ['*'],
-        credentials: true
-    })
     const document = SwaggerModule.createDocument(app, config)
     SwaggerModule.setup('api/docs', app, document, {
         swaggerOptions: {
