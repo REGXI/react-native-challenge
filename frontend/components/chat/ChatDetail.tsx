@@ -15,7 +15,7 @@ export default function ChatDetail({ chat }: ChatDetailProps) {
                 }}
             ></Image>
             <Text style={{ fontSize: 24, margin: 16 }}>{chat.name}</Text>
-            <Text style={{ margin: 16 }}>{chat.message}</Text>
+            <Text style={styles.message}>{chat.message}</Text>
         </View>
     );
 }
@@ -31,5 +31,12 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    message: {
+        padding: 10,
+        margin: 16,
+        borderColor: "#E4E4E4",
+        borderWidth: 1,
+        borderRadius: 10,
     }
 });
