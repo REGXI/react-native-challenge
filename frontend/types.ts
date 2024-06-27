@@ -4,5 +4,6 @@ export interface ChatItem {
     name: string;
     image: string;
     message: string;
+has_read: boolean;
     updated_at: string;
 }

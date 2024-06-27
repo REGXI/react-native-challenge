@@ -1,5 +1,5 @@
 import { ChatItem } from "@/types";
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, StyleSheet } from "react-native";
 
 export interface ChatDetailProps {
     chat: ChatItem;
@@ -7,14 +7,11 @@ export interface ChatDetailProps {
 
 export default function ChatDetail({ chat }: ChatDetailProps) {
     return (
-        <View>
+        <View style={styles.main}>
             <Image
                 source={{ uri: chat.image }}
                 style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 1000,
-                    margin: 16,
+                    ...styles.image,
                 }}
             ></Image>
             <Text style={{ fontSize: 24, margin: 16 }}>{chat.name}</Text>
@@ -22,3 +19,17 @@ export default function ChatDetail({ chat }: ChatDetailProps) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    image: {
+        width: 80,
+        height: 80,
+        borderRadius: 1000,
+        margin: 18,
+    },
+    main: {
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    }
+});

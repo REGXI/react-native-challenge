@@ -1,24 +1,42 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 import { ChatItem } from "@/types";
-import { memo } from "react";
+import { getFontSize } from "@/utils/fonts";
+
+import { Inter_500Medium, useFonts } from "@expo-google-fonts/inter";
+
 export interface ChatListItemProps {
     chat: ChatItem;
 }
 
-export const chatListItemHeight = 80;
+export const chatListItemHeight = 60;
 
-export const ChatListItem = ({ chat }: ChatListItemProps) => (
-    <View style={styles.container}>
-        <Image style={styles.image} source={{ uri: chat.image }} />
-        <View style={styles.textContents}>
-            <Text style={styles.title}>{chat.name}</Text>
-            <Text style={styles.message}>{chat.message}</Text>
+export const ChatListItem = ({ chat }: ChatListItemProps) => {
+    const [fontsLoaded] = useFonts({
+        Inter_500Medium,
+    });
+
+    return (
+        <View style={styles.container}>
+            <Image style={styles.image} source={{ uri: chat.image }} />
+            <View style={styles.mainContent} >
+                <View style={styles.topRow}>
+                    <Text style={styles.title}>{chat.name}</Text>
+                    <Text style={styles.timeStamp}>
+                        {formatDistanceToNow(chat.updated_at, { addSuffix: true })}
+                    </Text>
+                </View>
+                <View style={styles.bottomRow}>
+                    <Text style={styles.message}>{chat.message}</Text>
+
+                    { /* If !has_read */ chat.has_read ? null : (
+                            <View style={styles.unreadBadge}></View>
+                        )
+                    }
+                </View>
+            </View>
         </View>
-        <Text style={styles.timeStamp}>
-            {formatDistanceToNow(chat.updated_at, { addSuffix: true })}
-        </Text>
-    </View>
-);
+    )
+};
 
 function formatDistanceToNow(date: string, options: { addSuffix: boolean }) {
     // This is a naive implementation of the function
@@ -34,13 +52,13 @@ function formatDistanceToNow(date: string, options: { addSuffix: boolean }) {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-        return `${days} days ago`;
+        return `${days}d`;
     } else if (hours > 0) {
-        return `${hours} hours ago`;
+        return `${hours}h`;
     } else if (minutes > 0) {
-        return `${minutes} minutes ago`;
+        return `${minutes}m`;
     } else {
-        return `${seconds} seconds ago`;
+        return `${seconds}s`;
     }
 }
 
@@ -49,35 +67,70 @@ const styles = StyleSheet.create({
         display: "flex",
         width: "100%",
         flexDirection: "row",
-        padding: 16,
+        alignItems: "center",
+        padding: 5,
         height: chatListItemHeight,
-        flexGrow: 1,
-        borderBottomWidth: 1,
-        borderBottomColor: "lightgray",
+        paddingHorizontal: 20
     },
     image: {
-        width: 48,
-        height: 48,
+        width: 50,
+        height: 50,
         borderRadius: 1000,
         marginRight: 16,
         backgroundColor: "lightgray",
     },
     textContents: {
-        justifyContent: "center",
+        justifyContent: "flex-start",
         flexGrow: 1,
+        height: "100%",
     },
     title: {
+        fontFamily: "Inter",
         fontWeight: 500,
-        fontSize: 15
+        fontSize: getFontSize(15),
+        flexGrow: 1,
     },
     message: {
+        fontFamily: "Inter",
         fontWeight: 500,
         color: "#666666",
-        fontSize: 11
+        fontSize: getFontSize(11),
+        flexGrow: 1,
+    },
+    unreadBadge: {
+        width: 10,
+        height: 10,
+        borderRadius: 1000,
+        backgroundColor: "#0099FF",
+        alignSelf: "center",
     },
     timeStamp: {
+        fontFamily: "Inter",
         color: "#666666",
-        fontSize: 11,
+        fontSize: getFontSize(11),
         alignSelf: "center",
+        flexGrow: 0,
+    },
+    topRow: {
+        flexDirection: "row",
+        flexGrow: 1,
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    bottomRow: {
+        flexDirection: "row",
+        flexGrow: 1,
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        paddingBottom: 4,
+    },
+    mainContent: {
+        height: "100%",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        flexGrow: 1,
+        borderBottomWidth: 1,
+        borderBottomColor: "lightgray",
+        paddingBottom: 5,
     },
 });

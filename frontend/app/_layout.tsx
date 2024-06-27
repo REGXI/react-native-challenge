@@ -4,8 +4,29 @@ export default function RootLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="chat/[id]" />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="index"
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      name="chat/[id]/index" />
+
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      name="chat/[id]/edit" />
+
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      name="chat/create" />
     </Stack>
   );
 }
