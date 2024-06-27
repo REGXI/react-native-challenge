@@ -13,13 +13,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./ios_specifics/GoogleService-Info.plist",
+      "bundleIdentifier": "com.regxi.rnchallenge"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.regxi.rnchallenge",
+      "googleServicesFile": "./android_specifics/google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -28,7 +32,13 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photoPermision": "The app accesses your photos to upload a picture for your contacts"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

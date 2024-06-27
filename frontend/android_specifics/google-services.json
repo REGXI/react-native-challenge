@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "584045414447",
+    "project_id": "react-native-challenge-regxi",
+    "storage_bucket": "react-native-challenge-regxi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584045414447:android:72958f06c7863358be1eda",
+        "android_client_info": {
+          "package_name": "com.regxi.rnchallenge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS_nfYGBo3MKDaf0biZS4wkrctkQrjmG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
