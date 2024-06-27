@@ -7,6 +7,7 @@ import { ChatItemEditDTO } from "@/types";
 import { useState } from "react";
 
 import { useChatApi } from "@/service/api";
+import { router } from "expo-router";
 
 export default function ChatCreate() {
     const insets = useSafeAreaInsets();
@@ -34,14 +35,17 @@ export default function ChatCreate() {
     }
 
     const save = async () => {
+        console.log('Saving: ', chat)
         await createChat({ chat })
+
+        if (newChat) router.navigate(`/chat/${newChat.id}`)
     }
 
     return (
         <View style={{
-            flex: 1,
             justifyContent: 'flex-start',
             alignItems: 'center',
+            backgroundColor: 'white',
             paddingTop: insets.top,
             paddingBottom: insets.bottom,
             paddingLeft: insets.left,
@@ -49,8 +53,11 @@ export default function ChatCreate() {
         }}>
             <Header title="New contact" canPop />
             <View>
-                <ChatForm chat={chat} updateChatAttributes={updateChat}/>
-                <Button onPress={save} title="Create Contact Now"/>
+                <ChatForm
+                    chat={chat}
+                    updateChatAttributes={updateChat}
+                    saveButton={() => <Button onPress={save} title="Create Contact Now"/>}
+                />
             </View>
         </View>
     )

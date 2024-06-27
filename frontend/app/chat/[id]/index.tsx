@@ -1,12 +1,15 @@
 import ChatDetail from '@/components/chat/ChatDetail';
 import Header from '@/components/navigation/Header';
-import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
+import { Link, router, useLocalSearchParams, useNavigation } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useEffect } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { useChatApi } from '@/service/api';
+import { GenericResponse } from '@/service/types';
+import { ChatItem } from '@/types';
 
 export default function ChatForId() {
+    const [refreshing, setRefreshing] = useState(false);
     const { id } = useLocalSearchParams();
 
     const {
@@ -28,10 +31,7 @@ export default function ChatForId() {
         getChat({ id: id + '' })
             .catch((error) => {
                 console.error(error);
-            })
-            .then(() => {
-                console.log('Chat fetched')
-                console.log(chat)
+                router.navigate('/');
             });
     }, [id]);
 
@@ -43,27 +43,57 @@ export default function ChatForId() {
         );
     }
 
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await getChat({ id: id + '' });
+        setRefreshing(false);
+    }
+
+    // Temp. Should use a store and reactive updates instead of refreshing
+    const unsubscribe = navigation.addListener('focus', () => {
+        getChat({ id: id + ''})
+        .catch((error) => {
+          console.error(error);
+        });
+      });
+    
+      useEffect(() => {
+        return unsubscribe;
+      }, []);
+
     const insets = useSafeAreaInsets();
 
     return (
         <View
-            style={{
-                ...styles.container,
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingTop: insets.top,
-                paddingBottom: insets.bottom,
-                paddingLeft: insets.left,
-                paddingRight: insets.right,
-            }}
+        style={{
+            ...styles.container,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+        }}
         >
             <Header title="Contact" large={false} canPop rightItem={editButton} />
 
-            <View style={styles.main}>
-                {isGettingChat && <Text>Loading...</Text>}
-                {chat && <ChatDetail chat={chat} />}
-            </View>
+            <ScrollView
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            >
+                <View style={styles.main}>
+                    {isGettingChat &&
+                        <ActivityIndicator
+                            style={styles.activityIndicator}
+                            animating={isGettingChat}
+                            size="large"
+                            color="#0000ff"
+                        />
+                    }
+                    {chat && <ChatDetail chat={chat} />}
+                </View>
+            </ScrollView>
         </View>
     );
 }
@@ -79,5 +109,11 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'column',
         alignItems: 'center'
-    }
+    },
+    activityIndicator: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: [{ translateX: -25 }, { translateY: -25 }],
+    },
 });

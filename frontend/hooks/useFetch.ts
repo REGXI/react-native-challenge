@@ -2,7 +2,11 @@ import { useState } from "react";
 
 // Taken from https://dev.to/jeeny/how-to-create-an-api-layer-with-react-hooks-and-typescriptand-why-3a8o
 
-const DEFAULT_FETCH_OPTIONS = {};
+const DEFAULT_FETCH_OPTIONS = {
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
 
 type UseFetchProps = {
   endpoint: string;

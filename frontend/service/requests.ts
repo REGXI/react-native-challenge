@@ -1,7 +1,7 @@
 import { useFetch } from "@/hooks/useFetch";
 import { ChatItem } from "@/types";
 
-import { GetChatInput, CreateChatInput, GenericResponse } from "./types";
+import { GetChatInput, CreateChatInput, GenericResponse, UpdateChatInput } from "./types";
 
 export const useGetChats = () => {
     const { commonFetch, isLoading, data: response } = useFetch<GenericResponse<ChatItem[]>>({
@@ -49,7 +49,7 @@ export const useUpdateChat = () => {
         method: "PUT",
     });
 
-    const updateChat = (input: CreateChatInput & GetChatInput) => commonFetch({
+    const updateChat = (input: UpdateChatInput) => commonFetch({
         dynamicEndpoint: `/${input.id}`,
         input: input.chat,
         fetchOptions: { method: "PUT" }

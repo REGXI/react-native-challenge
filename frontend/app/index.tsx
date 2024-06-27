@@ -1,5 +1,5 @@
-import { Text, View, FlatList, Image } from "react-native";
-import { useCallback, useEffect } from "react";
+import { Text, View, FlatList, Image, ActivityIndicator, StyleSheet, RefreshControl } from "react-native";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -13,6 +13,7 @@ import { useChatApi } from "@/service/api";
 import Header from "@/components/navigation/Header";
 
 export default function Index() {
+  const [refreshing, setRefreshing] = useState(false);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const {
@@ -52,12 +53,30 @@ export default function Index() {
     );
   }, []);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getChats();
+    setRefreshing(false);
+  }
+
+  const unsubscribe = navigation.addListener('focus', () => {
+    getChats()
+    .catch((error) => {
+      console.error(error);
+    });
+  });
+
+  useEffect(() => {
+    return unsubscribe;
+  }, []);
+
   return (
     <View
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: 'white',
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
         paddingLeft: insets.left,
@@ -66,7 +85,9 @@ export default function Index() {
     >
       <Header title="Chats" large rightItem={addButton} />
 
-      {isGettingChats && <Text>Loading...</Text>}
+      {isGettingChats &&
+        <ActivityIndicator style={styles.activityIndicator} animating={isGettingChats} size="large" color="#0000ff" />
+      }
 
       <FlatList
         data={chats}
@@ -76,7 +97,22 @@ export default function Index() {
         style={{
           width: "100%",
         }}
-      ></FlatList>
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      </FlatList>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  activityIndicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})

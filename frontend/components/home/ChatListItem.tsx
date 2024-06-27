@@ -8,7 +8,7 @@ export interface ChatListItemProps {
     chat: ChatItem;
 }
 
-export const chatListItemHeight = 60;
+export const chatListItemHeight = 70;
 
 export const ChatListItem = ({ chat }: ChatListItemProps) => {
     const [fontsLoaded] = useFonts({
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     container: {
         display: "flex",
         width: "100%",
+        maxWidth: "100%",
         flexDirection: "row",
         alignItems: "center",
         padding: 5,
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
         color: "#666666",
         fontSize: getFontSize(11),
         flexGrow: 1,
+        width: 'auto'
     },
     unreadBadge: {
         width: 10,
@@ -123,9 +125,11 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "flex-start",
         paddingBottom: 4,
+        paddingRight: 5,
     },
     mainContent: {
         height: "100%",
+        maxWidth: "100%",
         justifyContent: "space-between",
         alignItems: "flex-start",
         flexGrow: 1,

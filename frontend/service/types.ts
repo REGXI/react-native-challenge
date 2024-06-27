@@ -13,3 +13,8 @@ export interface GetChatInput {
 export interface CreateChatInput {
     chat: ChatItemEditDTO;
 }
+
+export interface UpdateChatInput {
+    id: string;
+    chat: ChatItemEditDTO;
+}
