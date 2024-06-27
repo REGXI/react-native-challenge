@@ -1,9 +1,10 @@
-import { useGetChats, useCreateChat, useGetChat } from "./requests";
+import { useGetChats, useCreateChat, useGetChat, useUpdateChat } from "./requests";
 
 export const useChatApi = () => {
     const { isLoading: isGettingChats, getChats, chats } = useGetChats();
     const { isLoading: isCreatingChat, createChat, chatCreated } = useCreateChat();
     const { isLoading: isGettingChat, getChat, chat } = useGetChat();
+    const { isLoading: isUpdatingChat, updateChat, chatUpdated } = useUpdateChat();
 
     return {
         getChats: {
@@ -21,5 +22,10 @@ export const useChatApi = () => {
             mutation: createChat,
             data: chatCreated,
         },
+        updateChat: {
+            isLoading: isUpdatingChat,
+            mutation: updateChat,
+            data: chatUpdated,
+        }
     };
 }

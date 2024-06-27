@@ -1,4 +1,4 @@
-import { ChatItem } from "@/types";
+import { ChatItem, ChatItemEditDTO } from "@/types";
 
 export interface GenericResponse<T> {
     status: boolean;
@@ -11,5 +11,5 @@ export interface GetChatInput {
 }
 
 export interface CreateChatInput {
-    chat: ChatItem;
+    chat: ChatItemEditDTO;
 }

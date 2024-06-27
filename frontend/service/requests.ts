@@ -20,7 +20,7 @@ export const useCreateChat = () => {
         method: "POST",
     });
 
-    const createChat = (input: CreateChatInput) => commonFetch({ input, fetchOptions: { method: "POST" } });
+    const createChat = (input: CreateChatInput) => commonFetch({ input: input.chat, fetchOptions: { method: "POST" } });
 
     return { isLoading, createChat, chatCreated: response?.data };
 }
@@ -41,4 +41,19 @@ export const useGetChat = () => {
     });
 
     return { isLoading, getChat, chat: response?.data };
+}
+
+export const useUpdateChat = () => {
+    const { commonFetch, isLoading, data: response } = useFetch<GenericResponse<ChatItem>>({
+        endpoint: "/chats",
+        method: "PUT",
+    });
+
+    const updateChat = (input: CreateChatInput & GetChatInput) => commonFetch({
+        dynamicEndpoint: `/${input.id}`,
+        input: input.chat,
+        fetchOptions: { method: "PUT" }
+    });
+    
+    return { isLoading, updateChat, chatUpdated: response?.data };
 }
